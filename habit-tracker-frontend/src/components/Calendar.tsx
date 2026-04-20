@@ -60,21 +60,21 @@ export default function Calendar({ data, onDateClick }: CalendarProps) {
       const isToday = key === today
       const isFuture = key > today
       const entry = data.entries[key]
+      const value = entry ? entry[habit] : undefined
 
       let cls = 'cal-cell'
       let content = <span className="day-num">{d}</span>
 
       if (isFuture) {
         cls += ' future'
-      } else if (entry && entry[habit] !== undefined) {
-        if (entry[habit] === 1) {
-          cls += ' pass'
-          content = <span className="icon">✓</span>
-        } else {
-          cls += ' fail'
-          content = <span className="icon">✗</span>
-        }
+      } else if (value === 1) {
+        cls += ' pass'
+        content = <span className="icon">✓</span>
+      } else if (value === 0) {
+        cls += ' fail'
+        content = <span className="icon">✗</span>
       } else {
+        // This handles undefined, null, or any other value
         cls += ' unset'
       }
       if (isToday) cls += ' today-cell'

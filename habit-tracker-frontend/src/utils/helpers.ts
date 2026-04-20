@@ -1,4 +1,5 @@
 import type { HabitColor, HabitData, WeeklyData, MonthlyData, Stats, Streaks, SuccessRateResult } from '../types'
+
 export const colorPalette: HabitColor[] = [
   { text: '#c4763a', light: 'rgba(196, 118, 58, 0.7)' },
   { text: '#3a7cc4', light: 'rgba(58, 124, 196, 0.7)' },
@@ -29,31 +30,47 @@ export const computeStreaks = (data: HabitData, habit: string): Streaks => {
   let current = 0, best = 0, temp = 0
   const sorted = Object.keys(data.entries).sort()
   sorted.forEach(k => {
-    if (data.entries[k][habit] === 1) {
+    const value = data.entries[k][habit]
+    if (value === 1) {
       temp++
       best = Math.max(best, temp)
     } else {
-      temp = 0
+      temp = 0  // null or 0 both reset the streak
     }
   })
+  // Current streak from end - stop at first non-1 (including null)
   for (let i = sorted.length - 1; i >= 0; i--) {
-    if (data.entries[sorted[i]][habit] === 1) current++
-    else break
+    const value = data.entries[sorted[i]][habit]
+    if (value === 1) {
+      current++
+    } else {
+      break  // Stop at null or 0
+    }
   }
   return { current, best }
 }
 
 export const computeStats = (data: HabitData, habit: string): Stats => {
   let pass = 0, fail = 0
+  let total = 0  // Only count entries that have actual data (not null)
   const sorted = Object.keys(data.entries).sort()
   sorted.forEach(k => {
-    if (data.entries[k][habit] === 1) pass++
-    else fail++
+    const value = data.entries[k][habit]
+    if (value === 1) {
+      pass++
+      total++
+    } else if (value === 0) {
+      fail++
+      total++
+    }
+    // null values are ignored - not counted in total
   })
-  const total = sorted.length
   return {
     rate: total ? ((pass / total) * 100).toFixed(1) : '0.0',
-    pass, fail, total, sorted
+    pass, 
+    fail, 
+    total,  // Now total only counts days with actual data
+    sorted
   }
 }
 
@@ -74,8 +91,13 @@ export const weeklyData = (data: HabitData, habits: string[]): WeeklyData => {
       habits.forEach(h => weeks[wk][h] = { pass: 0, fail: 0 })
     }
     habits.forEach(h => {
-      if (data.entries[d][h] === 1) weeks[wk][h].pass++
-      else if (data.entries[d][h] === 0) weeks[wk][h].fail++
+      const value = data.entries[d][h]
+      if (value === 1) {
+        weeks[wk][h].pass++
+      } else if (value === 0) {
+        weeks[wk][h].fail++
+      }
+      // null values are ignored entirely
     })
   })
   return weeks
@@ -91,8 +113,13 @@ export const monthlyData = (data: HabitData, habits: string[]): MonthlyData => {
       habits.forEach(h => months[key][h] = { pass: 0, fail: 0 })
     }
     habits.forEach(h => {
-      if (v[h] === 1) months[key][h].pass++
-      else if (v[h] === 0) months[key][h].fail++
+      const value = v[h]
+      if (value === 1) {
+        months[key][h].pass++
+      } else if (value === 0) {
+        months[key][h].fail++
+      }
+      // null values are ignored
     })
   })
   return months
@@ -100,8 +127,14 @@ export const monthlyData = (data: HabitData, habits: string[]): MonthlyData => {
 
 export const sortPeriods = (periods: string[], isWeekly: boolean): string[] => {
   if (isWeekly) {
-    return periods.sort((a, b) => parseInt(a.slice(1)) - parseInt(b.slice(1)))
+    // Sort weeks numerically: W1, W2, W3... W10, W11
+    return periods.sort((a, b) => {
+      const numA = parseInt(a.slice(1))
+      const numB = parseInt(b.slice(1))
+      return numA - numB
+    })
   } else {
+    // Sort months chronologically: 2025-12, 2026-01, 2026-02
     return periods.sort()
   }
 }
@@ -121,16 +154,38 @@ export const successRateByPeriod = (data: HabitData, habits: string[], viewMode:
 
 export const cumulativeRate = (data: HabitData, sorted: string[], habit: string): string[] => {
   let pass = 0
+  let countedDays = 0  // Track only days with actual data
   return sorted.map((k, i) => {
-    if (data.entries[k][habit] === 1) pass++
-    return ((pass / (i + 1)) * 100).toFixed(1)
+    const value = data.entries[k][habit]
+    if (value === 1) {
+      pass++
+      countedDays++
+    } else if (value === 0) {
+      countedDays++
+    }
+    // null values are skipped - not counted
+    if (countedDays === 0) return '0'
+    return ((pass / countedDays) * 100).toFixed(1)
   })
 }
 
 export const rollingRate = (data: HabitData, sorted: string[], habit: string, window: number = 30): string[] => {
   return sorted.map((_, i) => {
     const slice = sorted.slice(Math.max(0, i - window + 1), i + 1)
-    const passes = slice.filter(k => data.entries[k][habit] === 1).length
-    return ((passes / slice.length) * 100).toFixed(1)
+    let passes = 0
+    let countedDays = 0
+    
+    slice.forEach(k => {
+      const value = data.entries[k][habit]
+      if (value === 1) {
+        passes++
+        countedDays++
+      } else if (value === 0) {
+        countedDays++
+      }
+      // null values are ignored
+    })
+    
+    return countedDays === 0 ? '0' : ((passes / countedDays) * 100).toFixed(1)
   })
 }

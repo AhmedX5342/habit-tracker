@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Chart from 'chart.js/auto'
 import { HabitData } from '../types'
-import { computeStats, successRateByPeriod, cumulativeRate, rollingRate, getHabitColor } from '../utils/helpers'
+import { computeStats, successRateByPeriod, cumulativeRate, rollingRate, getHabitColor, sortPeriods } from '../utils/helpers'
 
 interface StatisticsProps {
   data: HabitData
@@ -71,6 +71,7 @@ export default function Statistics({ data }: StatisticsProps) {
 
     if (chartVisibility.successRate && chartRefs.successRate.current) {
       const { periods, rates } = successRateByPeriod(data, habits, viewMode)
+      // periods are already sorted by sortPeriods
       const datasets = habits.map(h => ({
         label: `${h.charAt(0).toUpperCase() + h.slice(1)} Success %`,
         data: rates[h],
@@ -89,7 +90,10 @@ export default function Statistics({ data }: StatisticsProps) {
 
     if (chartVisibility.bar && chartRefs.bar.current) {
       const data_src = viewMode === 'weekly' ? weeklyData(data, habits) : monthlyData(data, habits)
-      const periods = Object.keys(data_src).sort()
+      // Get periods and sort them numerically
+      let periods = Object.keys(data_src)
+      periods = sortPeriods(periods, viewMode === 'weekly')
+      
       const barDatasets = habits.map(h => ({
         label: `${h.charAt(0).toUpperCase() + h.slice(1)} Fails`,
         data: periods.map(k => data_src[k][h].fail),
@@ -240,8 +244,13 @@ function weeklyData(data: HabitData, habits: string[]) {
       habits.forEach(h => weeks[wk][h] = { pass: 0, fail: 0 })
     }
     habits.forEach(h => {
-      if (data.entries[d][h] === 1) weeks[wk][h].pass++
-      else if (data.entries[d][h] === 0) weeks[wk][h].fail++
+      const value = data.entries[d][h]
+      if (value === 1) {
+        weeks[wk][h].pass++
+      } else if (value === 0) {
+        weeks[wk][h].fail++
+      }
+      // null values are ignored
     })
   })
   return weeks
@@ -257,8 +266,13 @@ function monthlyData(data: HabitData, habits: string[]) {
       habits.forEach(h => months[key][h] = { pass: 0, fail: 0 })
     }
     habits.forEach(h => {
-      if (v[h] === 1) months[key][h].pass++
-      else if (v[h] === 0) months[key][h].fail++
+      const value = v[h]
+      if (value === 1) {
+        months[key][h].pass++
+      } else if (value === 0) {
+        months[key][h].fail++
+      }
+      // null values are ignored
     })
   })
   return months
