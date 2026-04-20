@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discipline Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --surface: #181818;
+      --surface2: #222222;
+      --border: #2a2a2a;
+      --text: #e8e0d0;
+      --muted: #6b6560;
+      --amber: #d4943a;
+      --amber-dim: #7a5020;
+      --green: #4a8c5c;
+      --green-dim: #1e3d28;
+      --red: #8c4a4a;
+      --red-dim: #3d1e1e;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 15px;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 32px 40px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+
+    .header-date {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 0;
+    }
+
+    .tab {
+      padding: 10px 24px;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .tab:hover {
+      color: var(--text);
+    }
+
+    .tab.active {
+      color: var(--amber);
+      border-bottom-color: var(--amber);
+    }
+
+    /* ── Content ── */
+    .page {
+      display: none;
+      padding: 40px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── Section headers ── */
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── Calendar ── */
+    .calendars-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 900px) {
+      .calendars-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .cal-wrapper {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .cal-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cal-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .cal-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cal-nav button {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .cal-nav button:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .cal-month {
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--text);
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .cal-grid {
+      padding: 16px;
+    }
+
+    .cal-days-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      margin-bottom: 6px;
+    }
+
+    .cal-day-name {
+      text-align: center;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 4px 0;
+    }
+
+    .cal-cells {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .cal-cell {
+      aspect-ratio: 1;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 1px solid transparent;
+    }
+
+    .cal-cell.empty {
+      cursor: default;
+    }
+
+    .cal-cell.future {
+      color: var(--muted);
+      cursor: default;
+      opacity: 0.4;
+    }
+
+    .cal-cell.pass {
+      background: var(--green-dim);
+      color: #6ec989;
+      border-color: #2a5e38;
+    }
+
+    .cal-cell.fail {
+      background: var(--red-dim);
+      color: #e08080;
+      border-color: #6b2e2e;
+    }
+
+    .cal-cell.today-cell {
+      border-color: var(--amber) !important;
+    }
+
+    .cal-cell.unset {
+      background: var(--surface2);
+      color: var(--muted);
+    }
+
+    .cal-cell:not(.empty):not(.future):hover {
+      border-color: var(--amber);
+      transform: scale(1.08);
+    }
+
+    .cal-cell .day-num {
+      font-size: 10px;
+      line-height: 1;
+    }
+
+    .cal-cell .icon {
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    /* ── Today's Tracker ── */
+    .tracker-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 48px;
+    }
+
+    .tracker-date-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .tracker-date-selector input[type="date"] {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .tracker-date-selector input[type="date"]:focus {
+      outline: none;
+      border-color: var(--amber);
+    }
+
+    .today-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.15s;
+    }
+
+    .today-btn:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .tracker-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .tracker-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .tracker-label {
+      width: 140px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .choice-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .choice-btn {
+      padding: 8px 20px;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+
+    .choice-btn:hover {
+      border-color: var(--amber);
+      color: var(--text);
+    }
+
+    .choice-btn.selected-pass {
+      background: var(--green-dim);
+      border-color: #4a8c5c;
+      color: #6ec989;
+    }
+
+    .choice-btn.selected-fail {
+      background: var(--red-dim);
+      border-color: #8c4a4a;
+      color: #e08080;
+    }
+
+    .tracker-save-row {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .save-btn {
+      background: var(--amber);
+      color: #0f0f0f;
+      border: none;
+      padding: 10px 28px;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+
+    .save-btn:hover {
+      background: #e8a84a;
+    }
+
+    .save-msg {
+      font-size: 11px;
+      color: var(--green);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .save-msg.show {
+      opacity: 1;
+    }
+
+    /* ── Stats page ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 800px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .stat-card-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .stat-card-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .stat-card-sub {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 800px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .chart-card.full {
+      grid-column: 1 / -1;
+    }
+
+    .chart-card-title {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .chart-card canvas {
+      width: 100% !important;
+    }
+
+    /* ── Diary page ── */
+    .diary-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 24px;
+      height: calc(100vh - 160px);
+    }
+
+    @media (max-width: 700px) {
+      .diary-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+    }
+
+    .diary-sidebar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .diary-sidebar-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .diary-new-btn {
+      background: var(--amber);
+      color: #0f0f0f;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+
+    .diary-new-btn:hover {
+      background: #e8a84a;
+    }
+
+    .diary-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .diary-list::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .diary-list::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    .diary-entry-item {
+      padding: 14px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+
+    .diary-entry-item:hover {
+      background: var(--surface2);
+    }
+
+    .diary-entry-item.active {
+      background: var(--surface2);
+      border-left: 2px solid var(--amber);
+    }
+
+    .diary-entry-date {
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .diary-entry-preview {
+      font-size: 11px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .diary-main {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .diary-editor-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .diary-editor-date {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .diary-editor-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .diary-delete-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .diary-delete-btn:hover {
+      border-color: #8c4a4a;
+      color: #e08080;
+    }
+
+    .diary-save-btn {
+      background: var(--amber);
+      color: #0f0f0f;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+
+    .diary-save-btn:hover {
+      background: #e8a84a;
+    }
+
+    .diary-title-input {
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      padding: 20px 24px;
+      width: 100%;
+      outline: none;
+    }
+
+    .diary-title-input::placeholder {
+      color: var(--muted);
+    }
+
+    .diary-title-input:focus {
+      border-bottom-color: var(--amber);
+    }
+
+    .diary-textarea {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      padding: 20px 24px;
+      resize: none;
+      outline: none;
+    }
+
+    .diary-textarea::placeholder {
+      color: var(--muted);
+    }
+
+    .diary-empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      gap: 12px;
+    }
+
+    .diary-empty-state .icon {
+      font-size: 32px;
+    }
+
+    .diary-empty-state p {
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    /* ── Streak Display ── */
+    #tracker-streaks {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 32px;
+      margin-bottom: 48px;
+      padding: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .streak-display {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .streak-display span:first-child {
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    .streak-display span:last-child {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── View Toggle ── */
+    .view-toggle {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .chart-toggle-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    #view-toggle-btn,
+    #period-toggle-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.15s;
+    }
+
+    #view-toggle-btn:hover,
+    #period-toggle-btn:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    #chart-visibility-toggle {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      max-width: 300px;
+    }
+
+    #chart-visibility-toggle:hover {
+      border-color: var(--amber);
+    }
+
+    .chart-visibility-menu {
+      position: absolute;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px;
+      min-width: 220px;
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .chart-visibility-menu.show {
+      display: flex;
+    }
+
+    .chart-toggle-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      cursor: pointer;
+      font-size: 11px;
+      border-radius: 3px;
+      transition: background 0.15s;
+    }
+
+    .chart-toggle-item:hover {
+      background: var(--surface2);
+    }
+
+    .chart-toggle-item input[type="checkbox"] {
+      cursor: pointer;
+    }
+
+    .fails-toggle {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .fails-toggle button {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.15s;
+    }
+
+    .fails-toggle button:hover,
+    .fails-toggle button.active {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    /* ── Habit Management ── */
+    .habits-management {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .habit-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.15s;
+    }
+
+    .habit-btn:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .habit-delete-btn {
+      background: var(--red-dim);
+      border-color: #8c4a4a;
+      color: #e08080;
+    }
+
+    .habit-delete-btn:hover {
+      border-color: #e08080;
+      color: #e08080;
+    }
+
+    .habits-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .habit-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+
+    .habit-item-name {
+      letter-spacing: 0.5px;
+    }
+
+    .habit-item-delete {
+      background: none;
+      border: none;
+      color: #e08080;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0;
+      margin: 0;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+
+    .habit-item-delete:hover {
+      color: #ff6b6b;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="header-top">
+      <h1>Discipline</h1>
+      <span class="header-date" id="header-date"></span>
+    </div>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('tracker')">Tracker</div>
+      <div class="tab" onclick="switchTab('stats')">Statistics</div>
+      <div class="tab" onclick="switchTab('diary')">Diary</div>
+    </div>
+  </header>
+
+  <!-- ══ TRACKER TAB ══ -->
+  <div class="page active" id="page-tracker">
+
+    <div class="section-label">Log Entry</div>
+    <div class="tracker-panel">
+      <div class="tracker-date-selector">
+        <input type="date" id="tracker-date">
+        <button class="today-btn" onclick="setTrackerToday()">Today</button>
+      </div>
+      <div class="tracker-rows" id="tracker-rows"></div>
+      <div class="tracker-save-row">
+        <button class="save-btn" onclick="saveEntry()">Save Entry</button>
+        <span class="save-msg" id="save-msg">Saved</span>
+      </div>
+    </div>
+
+    <div id="tracker-streaks"></div>
+
+    <div class="section-label">Habit Management</div>
+    <div class="habits-management">
+      <button class="habit-btn" onclick="addHabit()">+ Add Habit</button>
+      <div class="habits-list" id="habits-list"></div>
+    </div>
+
+    <div class="section-label">Calendar View</div>
+    <div class="calendars-grid" id="calendars-grid"></div>
+  </div>
+
+  <!-- ══ STATS TAB ══ -->
+  <div class="page" id="page-stats">
+    <div class="view-toggle">
+      <div class="chart-toggle-group">
+        <span class="section-label" style="margin:0">Graphs:</span>
+        <div style="position: relative;">
+          <button id="chart-visibility-toggle" onclick="toggleChartMenu()">Select Charts ▼</button>
+          <div class="chart-visibility-menu" id="chart-visibility-menu">
+            <label class="chart-toggle-item">
+              <input type="checkbox" checked onchange="toggleChart('successRate')"> Success Rate Per Period
+            </label>
+            <label class="chart-toggle-item">
+              <input type="checkbox" checked onchange="toggleChart('bar')"> Weekly/Monthly Fails
+            </label>
+            <label class="chart-toggle-item">
+              <input type="checkbox" onchange="toggleChart('cumulative')"> Cumulative Success Rate
+            </label>
+            <label class="chart-toggle-item">
+              <input type="checkbox" onchange="toggleChart('rolling')"> 30-Day Rolling Pass Rate
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="chart-toggle-group">
+        <span class="section-label" style="margin:0">Period:</span>
+        <button id="period-toggle-btn" class="active" onclick="togglePeriod()">Weekly</button>
+      </div>
+    </div>
+    <div class="stats-grid" id="stats-grid"></div>
+    <div class="charts-grid">
+      <div class="chart-card full" id="chart-success-rate-container">
+        <div class="chart-card-title">Success Rate Per Period</div>
+        <canvas id="chart-success-rate"></canvas>
+      </div>
+      <div class="chart-card full" id="chart-bar-container">
+        <div class="chart-card-title">Weekly/Monthly Fails</div>
+        <canvas id="chart-bar"></canvas>
+      </div>
+      <div class="chart-card" id="chart-cumulative-container" style="display: none;">
+        <div class="chart-card-title">Cumulative Success Rate</div>
+        <canvas id="chart-cumulative"></canvas>
+      </div>
+      <div class="chart-card full" id="chart-rolling-container" style="display: none;">
+        <div class="chart-card-title">30-Day Rolling Pass Rate</div>
+        <canvas id="chart-rolling"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ DIARY TAB ══ -->
+  <div class="page" id="page-diary">
+    <div class="diary-layout">
+      <div class="diary-sidebar">
+        <div class="diary-sidebar-header">
+          <div class="section-label" style="margin:0">Entries</div>
+          <button class="diary-new-btn" onclick="newDiaryEntry()">+ New</button>
+        </div>
+        <div class="diary-list" id="diary-list"></div>
+      </div>
+      <div class="diary-main" id="diary-main">
+        <div class="diary-empty-state">
+          <div class="icon">✦</div>
+          <p>Select an entry or create a new one</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+
+</html>
