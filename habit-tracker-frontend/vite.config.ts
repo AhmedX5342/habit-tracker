@@ -10,7 +10,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 5173,
+    port: 5173,  // Keep frontend on 5173 for development
     proxy: {
       '/data': {
         target: 'http://localhost:3001',

@@ -6,11 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "clean": "rm -rf dist node_modules/.vite"
   },
   "dependencies": {
     "chart.js": "^4.5.1",
+    "express": "^5.2.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },

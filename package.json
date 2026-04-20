@@ -1,16 +1,32 @@
 {
   "name": "habit-tracker",
   "version": "1.0.0",
-  "description": "",
+  "description": "A modern web-based application for tracking daily habits, visualizing progress, and maintaining streaks. Build and monitor multiple habits with an intuitive interface, comprehensive statistics, and historical tracking.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node unified-server.js",
+    "dev:unified": "NODE_ENV=development node unified-server.js",
+    "build": "cd habit-tracker-frontend && npm run build",
+    "start": "NODE_ENV=production node unified-server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "express": "^5.2.1"
-  }
+    "express": "^5.2.1",
+    "http-proxy-middleware": "^3.0.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
+    "vite": "^8.0.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AhmedX5342/habit-tracker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AhmedX5342/habit-tracker/issues"
+  },
+  "homepage": "https://github.com/AhmedX5342/habit-tracker#readme"
 }
