@@ -54,7 +54,7 @@ async function load() {
     data = resp;
   } else {
     // Migrate old data
-    data = { habits: ['porn', 'masturbation'], entries: {} };
+    data = { habits: [], entries: {} };
     Object.entries(resp).forEach(([k, v]) => {
       if (k !== 'habits' && k !== 'entries') {
         data.entries[k] = v;
