@@ -1192,3 +1192,523 @@ header h1 {
     transform: translateX(0);
   }
 }
+/* ===== RESPONSIVE DESIGN ===== */
+/* Viewport meta already in index.html - ensure it's there */
+
+/* Base responsive settings */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
+/* ===== HAMBURGER MENU ===== */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+  margin-left: auto;
+}
+
+.hamburger span {
+  width: 100%;
+  height: 3px;
+  background: var(--text);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 70%;
+  max-width: 300px;
+  height: 100vh;
+  background: var(--surface);
+  box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  padding-top: 80px;
+  transition: right 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-menu.open {
+  right: 0;
+}
+
+.mobile-tab {
+  padding: 16px 24px;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+
+.mobile-tab:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+.mobile-tab.active {
+  color: var(--amber);
+  border-left-color: var(--amber);
+  background: var(--surface2);
+}
+
+/* Desktop tabs - hide on mobile */
+.desktop-tabs {
+  display: flex;
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Tablet and Mobile */
+@media (max-width: 1024px) {
+  /* Header */
+  header {
+    padding: 16px 20px 0;
+  }
+  
+  .header-top h1 {
+    font-size: 22px;
+  }
+  
+  .header-date {
+    font-size: 9px;
+    display: none;
+  }
+  
+  /* Show hamburger, hide desktop tabs */
+  .hamburger {
+    display: flex;
+  }
+  
+  .desktop-tabs {
+    display: none;
+  }
+  
+  /* Page padding */
+  .page {
+    padding: 20px;
+  }
+  
+  /* Section labels */
+  .section-label {
+    font-size: 9px;
+    margin-bottom: 12px;
+  }
+  
+  /* Tracker Panel */
+  .tracker-panel {
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .tracker-date-selector {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .tracker-date-selector input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .today-btn {
+    width: 100%;
+    padding: 10px;
+  }
+  
+  .tracker-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+  }
+  
+  .tracker-label {
+    width: 100%;
+    font-size: 12px;
+  }
+  
+  .choice-btns {
+    width: 100%;
+    gap: 10px;
+  }
+  
+  .choice-btn {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    font-size: 12px;
+  }
+  
+  .tracker-save-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .save-btn {
+    width: 100%;
+    padding: 12px;
+  }
+  
+  /* Streaks */
+  #tracker-streaks {
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+  
+  .streak-display span:first-child {
+    font-size: 18px;
+  }
+  
+  /* Habits Management */
+  .habits-management {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .habits-management > div:first-child {
+    flex-direction: column;
+  }
+  
+  .habits-management input {
+    width: 100%;
+  }
+  
+  .habit-btn {
+    width: 100%;
+  }
+  
+  .habits-list {
+    flex-wrap: wrap;
+  }
+  
+  /* Calendar */
+  .calendars-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .cal-header {
+    padding: 12px 16px;
+  }
+  
+  .cal-title {
+    font-size: 14px;
+  }
+  
+  .cal-month {
+    font-size: 10px;
+    min-width: 70px;
+  }
+  
+  .cal-nav button {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+  
+  .cal-grid {
+    padding: 12px;
+  }
+  
+  .cal-day-name {
+    font-size: 8px;
+  }
+  
+  .cal-cell {
+    font-size: 10px;
+  }
+  
+  /* Statistics */
+  .view-toggle {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .chart-toggle-group {
+    justify-content: space-between;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .stat-card {
+    padding: 16px;
+  }
+  
+  .stat-card-value {
+    font-size: 28px;
+  }
+  
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-card {
+    padding: 16px;
+    overflow-x: auto;
+  }
+  
+  canvas {
+    max-width: 100%;
+    height: auto !important;
+  }
+  
+  /* Diary */
+  .diary-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    gap: 16px;
+  }
+  
+  .diary-sidebar {
+    max-height: 300px;
+  }
+  
+  .diary-sidebar-header {
+    padding: 12px 16px;
+  }
+  
+  .diary-entry-item {
+    padding: 10px 12px;
+  }
+  
+  .diary-main {
+    min-height: 400px;
+  }
+  
+  .diary-editor-header {
+    padding: 12px 16px;
+  }
+  
+  .diary-title-input {
+    font-size: 18px;
+    padding: 16px;
+  }
+  
+  .diary-textarea {
+    font-size: 13px;
+    padding: 16px;
+    min-height: 250px;
+  }
+  
+  /* Settings */
+  .settings-container {
+    padding: 0;
+  }
+  
+  .settings-card {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .settings-card h3 {
+    font-size: 16px;
+  }
+  
+  .stats-grid-mini {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .stat-mini-value {
+    font-size: 20px;
+  }
+  
+  .radio-group {
+    gap: 12px;
+  }
+  
+  .settings-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Modal */
+  .modal-content {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .modal-header h3 {
+    font-size: 16px;
+  }
+  
+  .modal-body input {
+    font-size: 16px;
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .modal-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Import status */
+  .import-status {
+    bottom: 10px;
+    right: 10px;
+    left: 10px;
+    text-align: center;
+  }
+}
+
+/* Small phones (320px - 480px) */
+@media (max-width: 480px) {
+  .header-top h1 {
+    font-size: 18px;
+  }
+  
+  .page {
+    padding: 12px;
+  }
+  
+  .tracker-panel {
+    padding: 12px;
+  }
+  
+  .tracker-row {
+    padding: 8px;
+  }
+  
+  .choice-btn {
+    padding: 8px;
+    font-size: 11px;
+  }
+  
+  .habit-item {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+  
+  .stat-mini {
+    padding: 8px;
+  }
+  
+  .stat-mini-label {
+    font-size: 9px;
+  }
+  
+  .stat-mini-value {
+    font-size: 18px;
+  }
+  
+  .mobile-tab {
+    padding: 14px 20px;
+    font-size: 13px;
+  }
+}
+
+/* Landscape mode for phones */
+@media (max-width: 900px) and (orientation: landscape) {
+  .mobile-menu {
+    padding-top: 60px;
+  }
+  
+  .diary-sidebar {
+    max-height: 200px;
+  }
+  
+  .tracker-rows {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+}
+
+/* Make sure all content fits */
+img, canvas, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Improve touch targets for mobile */
+button, 
+.tab, 
+.mobile-tab,
+.habit-item-delete,
+.choice-btn,
+.save-btn,
+.today-btn,
+.diary-new-btn,
+.diary-delete-btn,
+.diary-save-btn,
+.modal-btn,
+.settings-btn {
+  min-height: 44px;
+}
+
+@media (min-width: 769px) {
+  button,
+  .tab,
+  .choice-btn,
+  .save-btn,
+  .today-btn,
+  .diary-new-btn,
+  .diary-delete-btn,
+  .diary-save-btn,
+  .modal-btn,
+  .settings-btn {
+    min-height: auto;
+  }
+}
+
+/* Fix for chart overflow on mobile */
+.chart-card canvas {
+  max-width: 100%;
+  height: auto !important;
+}
+
+.charts-grid {
+  overflow-x: hidden;
+}
+
+/* Ensure the app doesn't overflow on mobile */
+#root {
+  overflow-x: hidden;
+  width: 100%;
+}

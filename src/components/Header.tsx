@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 interface HeaderProps {
   activeTab: string
@@ -6,6 +6,8 @@ interface HeaderProps {
 }
 
 export default function Header({ activeTab, onTabChange }: HeaderProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   useEffect(() => {
     const headerDate = document.getElementById('header-date')
     if (headerDate) {
@@ -15,25 +17,58 @@ export default function Header({ activeTab, onTabChange }: HeaderProps) {
     }
   }, [])
 
+  const tabs = [
+    { id: 'tracker', label: 'Tracker' },
+    { id: 'stats', label: 'Statistics' },
+    { id: 'diary', label: 'Diary' },
+    { id: 'settings', label: 'Settings' }
+  ]
+
+  const handleTabChange = (tabId: string) => {
+    onTabChange(tabId)
+    setIsMenuOpen(false)
+  }
+
   return (
     <header>
       <div className="header-top">
         <h1>Discipline</h1>
         <span className="header-date" id="header-date"></span>
+        <button 
+          className={`hamburger ${isMenuOpen ? 'active' : ''}`} 
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
-      <div className="tabs">
-        <div className={`tab ${activeTab === 'tracker' ? 'active' : ''}`} onClick={() => onTabChange('tracker')}>
-          Tracker
-        </div>
-        <div className={`tab ${activeTab === 'stats' ? 'active' : ''}`} onClick={() => onTabChange('stats')}>
-          Statistics
-        </div>
-        <div className={`tab ${activeTab === 'diary' ? 'active' : ''}`} onClick={() => onTabChange('diary')}>
-          Diary
-        </div>
-        <div className={`tab ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => onTabChange('settings')}>
-          Settings
-        </div>
+      
+      {/* Desktop Tabs */}
+      <div className="tabs desktop-tabs">
+        {tabs.map(tab => (
+          <div 
+            key={tab.id}
+            className={`tab ${activeTab === tab.id ? 'active' : ''}`} 
+            onClick={() => handleTabChange(tab.id)}
+          >
+            {tab.label}
+          </div>
+        ))}
+      </div>
+
+      {/* Mobile Hamburger Menu */}
+      <div className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
+        {tabs.map(tab => (
+          <div 
+            key={tab.id}
+            className={`mobile-tab ${activeTab === tab.id ? 'active' : ''}`} 
+            onClick={() => handleTabChange(tab.id)}
+          >
+            {tab.label}
+          </div>
+        ))}
       </div>
     </header>
   )
