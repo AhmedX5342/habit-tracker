@@ -20,6 +20,20 @@ A modern, hybrid web and mobile application for tracking daily habits, visualizi
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 - **Type Safety**: Full TypeScript throughout the application
 
+## Demo
+
+Here's a visual preview of the application:
+
+<div align="center">
+
+![Demo 1](demo/01.jpeg) ![Demo 2](demo/02.jpeg) ![Demo 3](demo/03.jpeg)
+
+![Demo 4](demo/04.jpeg) ![Demo 5](demo/05.jpeg) ![Demo 6](demo/06.jpeg)
+
+![Demo 7](demo/07.jpeg) ![Demo 8](demo/08.jpeg) ![Demo 9](demo/09.jpeg)
+
+</div>
+
 ## Technology Stack
 
 ### Frontend
