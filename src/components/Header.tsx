@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Hamburger from 'hamburger-react'
 
 interface HeaderProps {
   activeTab: string
@@ -34,15 +35,15 @@ export default function Header({ activeTab, onTabChange }: HeaderProps) {
       <div className="header-top">
         <h1>Discipline</h1>
         <span className="header-date" id="header-date"></span>
-        <button 
-          className={`hamburger ${isMenuOpen ? 'active' : ''}`} 
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Menu"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <div className="hamburger-wrapper">
+          <Hamburger 
+            toggled={isMenuOpen} 
+            toggle={setIsMenuOpen} 
+            size={24}
+            color="var(--text)"
+            duration={0.3}
+          />
+        </div>
       </div>
       
       {/* Desktop Tabs */}
@@ -70,6 +71,11 @@ export default function Header({ activeTab, onTabChange }: HeaderProps) {
           </div>
         ))}
       </div>
+
+      {/* Overlay when menu is open */}
+      {isMenuOpen && (
+        <div className="menu-overlay" onClick={() => setIsMenuOpen(false)} />
+      )}
     </header>
   )
 }
