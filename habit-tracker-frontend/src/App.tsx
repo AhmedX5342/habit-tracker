@@ -3,6 +3,7 @@ import Header from './components/Header'
 import Tracker from './components/Tracker'
 import Statistics from './components/Statistics'
 import Diary from './components/Diary'
+import Settings from './components/Settings'
 import { HabitData, DiaryEntry } from './types'
 import './App.css'
 
@@ -54,6 +55,7 @@ function App() {
         {activeTab === 'tracker' && <Tracker data={data} onSave={saveData} />}
         {activeTab === 'stats' && <Statistics data={data} />}
         {activeTab === 'diary' && <Diary diary={diary} onSave={saveDiary} />}
+        {activeTab === 'settings' && <Settings data={data} diary={diary} onSaveData={saveData} onSaveDiary={saveDiary} />}
       </div>
     </div>
   )

@@ -31,6 +31,9 @@ export default function Header({ activeTab, onTabChange }: HeaderProps) {
         <div className={`tab ${activeTab === 'diary' ? 'active' : ''}`} onClick={() => onTabChange('diary')}>
           Diary
         </div>
+        <div className={`tab ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => onTabChange('settings')}>
+          Settings
+        </div>
       </div>
     </header>
   )
