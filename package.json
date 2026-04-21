@@ -1,32 +1,39 @@
 {
-  "name": "habit-tracker",
-  "version": "1.0.0",
-  "description": "A modern web-based application for tracking daily habits, visualizing progress, and maintaining streaks. Build and monitor multiple habits with an intuitive interface, comprehensive statistics, and historical tracking.",
-  "main": "index.js",
+  "name": "habit-tracker-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "node unified-server.js",
-    "dev:unified": "NODE_ENV=development node unified-server.js",
-    "build": "cd habit-tracker-frontend && npm run build",
-    "start": "NODE_ENV=production node unified-server.js"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist node_modules/.vite"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
+    "@capacitor/android": "^8.3.1",
+    "@capacitor/cli": "^8.3.1",
+    "@capacitor/core": "^8.3.1",
+    "@capacitor/filesystem": "^8.1.2",
+    "@capacitor/preferences": "^8.0.1",
+    "@capacitor/share": "^8.0.1",
+    "chart.js": "^4.5.1",
     "express": "^5.2.1",
-    "http-proxy-middleware": "^3.0.5"
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@types/node": "^24.12.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.5.0",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.58.2",
     "vite": "^8.0.9"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AhmedX5342/habit-tracker.git"
-  },
-  "bugs": {
-    "url": "https://github.com/AhmedX5342/habit-tracker/issues"
-  },
-  "homepage": "https://github.com/AhmedX5342/habit-tracker#readme"
+  }
 }
