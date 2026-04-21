@@ -26,11 +26,44 @@ Here's a visual preview of the application:
 
 <div align="center">
 
-![Demo 1](demo/01.jpeg) ![Demo 2](demo/02.jpeg) ![Demo 3](demo/03.jpeg)
+### Tracker Tab
+<table>
+<tr>
+<td width="33%"><img src="demo/01.jpeg" width="100%" alt="Demo 1"></td>
+<td width="33%"><img src="demo/02.jpeg" width="100%" alt="Demo 2"></td>
+<td width="33%"><img src="demo/03.jpeg" width="100%" alt="Demo 3"></td>
+</tr>
+</table>
 
-![Demo 4](demo/04.jpeg) ![Demo 5](demo/05.jpeg) ![Demo 6](demo/06.jpeg)
+### Statistics Tab
+<table>
+<tr>
+<td width="50%"><img src="demo/04.jpeg" width="100%" alt="Demo 4"></td>
+<td width="50%"><img src="demo/05.jpeg" width="100%" alt="Demo 5"></td>
+</tr>
+</table>
 
-![Demo 7](demo/07.jpeg) ![Demo 8](demo/08.jpeg) ![Demo 9](demo/09.jpeg)
+### Diary Tab
+<table>
+<tr>
+<td><img src="demo/06.jpeg" width="100%" alt="Demo 6"></td>
+</tr>
+</table>
+
+### Settings Tab
+<table>
+<tr>
+<td width="50%"><img src="demo/07.jpeg" width="100%" alt="Demo 7"></td>
+<td width="50%"><img src="demo/08.jpeg" width="100%" alt="Demo 8"></td>
+</tr>
+</table>
+
+### Tabs
+<table>
+<tr>
+<td><img src="demo/09.jpeg" width="100%" alt="Demo 9"></td>
+</tr>
+</table>
 
 </div>
 
