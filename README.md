@@ -38,32 +38,31 @@ Here's a visual preview of the application:
 ### Statistics Tab
 <table>
 <tr>
-<td width="50%"><img src="demo/04.jpeg" width="100%" alt="Demo 4"></td>
-<td width="50%"><img src="demo/05.jpeg" width="100%" alt="Demo 5"></td>
+<td width="25%"><img src="demo/04.jpeg" width="100%" alt="Demo 4"></td>
+<td width="25%"><img src="demo/05.jpeg" width="100%" alt="Demo 5"></td>
 </tr>
 </table>
 
-### Diary Tab
-<table>
+### Diary Tab & Tabs menu
+<table align="center">
 <tr>
-<td><img src="demo/06.jpeg" width="100%" alt="Demo 6"></td>
+<td width="50%">
+  <img src="demo/06.jpeg" width="100%" alt="Demo 6">
+</td>
+<td width="50%">
+  <img src="demo/09.jpeg" width="100%" alt="Demo 9">
+</td>
 </tr>
 </table>
 
 ### Settings Tab
 <table>
 <tr>
-<td width="50%"><img src="demo/07.jpeg" width="100%" alt="Demo 7"></td>
-<td width="50%"><img src="demo/08.jpeg" width="100%" alt="Demo 8"></td>
+<td width="33%"><img src="demo/07.jpeg" width="100%" alt="Demo 7"></td>
+<td width="33%"><img src="demo/08.jpeg" width="100%" alt="Demo 8"></td>
 </tr>
 </table>
 
-### Tabs
-<table>
-<tr>
-<td><img src="demo/09.jpeg" width="100%" alt="Demo 9"></td>
-</tr>
-</table>
 
 </div>
 
