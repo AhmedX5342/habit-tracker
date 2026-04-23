@@ -59,7 +59,7 @@ export default function Support() {
           rel="noopener noreferrer"
           className="github-link"
         >
-          <span className="github-icon">🐙</span>
+            <img src="/github.svg" alt="GitHub" width={20} height={20} />
           github.com/AhmedX5342/discipline-tracker
         </a>
       </div>
