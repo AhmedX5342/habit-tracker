@@ -52,6 +52,7 @@ header {
   align-items: baseline;
   gap: 16px;
   margin-bottom: 24px;
+  justify-content: space-between;
 }
 
 header h1 {
@@ -1942,5 +1943,40 @@ button,
   
   .features-list li {
     font-size: 12px;
+  }
+}
+
+/* Logo and Title Styles */
+.logo-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.logo-title:hover {
+  opacity: 0.8;
+}
+
+.header-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.header-top h1 {
+  margin: 0;
+}
+
+/* Responsive logo styles */
+@media (max-width: 768px) {
+  .header-logo {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .logo-title {
+    gap: 8px;
   }
 }

@@ -31,10 +31,18 @@ export default function Header({ activeTab, onTabChange }: HeaderProps) {
     setIsMenuOpen(false)
   }
 
+  const goToTracker = () => {
+    onTabChange('tracker')
+    setIsMenuOpen(false)
+  }
+
   return (
     <header>
       <div className="header-top">
-        <h1>Discipline Tracker</h1>
+        <div className="logo-title" onClick={goToTracker}>
+          <img src="/logo-transparent.png" alt="Discipline Tracker Logo" className="header-logo" />
+          <h1>Discipline Tracker</h1>
+        </div>
         <span className="header-date" id="header-date"></span>
         <div className="hamburger-wrapper">
           <Hamburger 
