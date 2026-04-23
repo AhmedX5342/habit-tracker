@@ -66,21 +66,11 @@ export default function Support() {
 
       {/* Status Section */}
       <div className="support-card">
-        <div className="support-card-icon">🌟</div>
-        <h3>Open Source</h3>
+        <div className="support-card-icon">🔨</div>
+        <h3>Status</h3>
         <p>
-          Discipline Tracker is completely open source and free to use.
-          Anyone can contribute to make it better.
+          Discipline Tracker is currently in active development. We are currently working on adding the app to the google play store. Your feedback and contributions are invaluable to us.
         </p>
-        <a
-          href="https://github.com/AhmedX5342/discipline-tracker"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="github-link"
-        >
-          <span className="github-icon">🐙</span>
-          github.com/AhmedX5342/discipline-tracker
-        </a>
       </div>
 
       {/* Why This App */}
