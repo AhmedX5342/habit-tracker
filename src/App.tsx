@@ -4,6 +4,7 @@ import Tracker from './components/Tracker'
 import Statistics from './components/Statistics'
 import Diary from './components/Diary'
 import Settings from './components/Settings'
+import Support from './components/Support'
 import { HabitData, DiaryEntry } from './types'
 import './App.css'
 import { api } from './utils/api'
@@ -49,6 +50,7 @@ function App() {
         {activeTab === 'stats' && <Statistics data={data} />}
         {activeTab === 'diary' && <Diary diary={diary} onSave={saveDiary} />}
         {activeTab === 'settings' && <Settings data={data} diary={diary} onSaveData={saveData} onSaveDiary={saveDiary} />}
+        {activeTab === 'support' && <Support />}
       </div>
     </div>
   )

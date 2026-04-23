@@ -1709,3 +1709,238 @@ button,
     opacity: 1;
   }
 }
+/* ===== SUPPORT PAGE STYLES ===== */
+.support-container {
+  max-width: 800px;
+  margin: 0 auto;
+  animation: fadeIn 0.3s ease;
+}
+
+.support-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.support-header .support-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.support-header h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.support-header p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.support-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.support-card:hover {
+  border-color: var(--amber);
+}
+
+.support-card.mission {
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+  border-color: var(--amber-dim);
+}
+
+.support-card-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.support-card h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.support-card p {
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+/* Email Box */
+.email-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.email-address {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  color: var(--amber);
+  word-break: break-all;
+}
+
+.copy-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+  min-height: auto;
+}
+
+.copy-btn:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+/* GitHub Link */
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface2);
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--text);
+  transition: all 0.15s;
+  margin-top: 8px;
+}
+
+.github-link:hover {
+  background: var(--amber-dim);
+  color: var(--amber);
+}
+
+.github-icon {
+  font-size: 18px;
+}
+
+/* Features List */
+.features-list {
+  list-style: none;
+  padding: 0;
+}
+
+.features-list li {
+  padding: 8px 0;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.features-list li:last-child {
+  border-bottom: none;
+}
+
+/* Quote Footer */
+.quote-footer {
+  text-align: center;
+  margin-top: 32px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.quote-footer p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  color: var(--text);
+  margin-bottom: 8px;
+  font-style: italic;
+}
+
+.quote-footer span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Responsive Support Page */
+@media (max-width: 768px) {
+  .support-header h2 {
+    font-size: 24px;
+  }
+  
+  .support-card {
+    padding: 20px;
+  }
+  
+  .support-card h3 {
+    font-size: 18px;
+  }
+  
+  .email-box {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .email-address {
+    text-align: center;
+  }
+  
+  .copy-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .github-link {
+    display: flex;
+    justify-content: center;
+    word-break: break-all;
+    text-align: center;
+  }
+  
+  .features-list li {
+    font-size: 14px;
+  }
+  
+  .quote-footer p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .support-header h2 {
+    font-size: 20px;
+  }
+  
+  .support-card {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .support-card-icon {
+    font-size: 24px;
+  }
+  
+  .features-list li {
+    font-size: 12px;
+  }
+}

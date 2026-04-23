@@ -22,7 +22,8 @@ export default function Header({ activeTab, onTabChange }: HeaderProps) {
     { id: 'tracker', label: 'Tracker' },
     { id: 'stats', label: 'Statistics' },
     { id: 'diary', label: 'Diary' },
-    { id: 'settings', label: 'Settings' }
+    { id: 'settings', label: 'Settings' },
+    { id: 'support', label: 'Support' }
   ]
 
   const handleTabChange = (tabId: string) => {
