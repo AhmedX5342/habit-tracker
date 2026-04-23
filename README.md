@@ -115,8 +115,8 @@ Data is stored in two JSON files:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/AhmedX5342/habit-tracker.git
-cd habit-tracker
+git clone https://github.com/AhmedX5342/discipline-tracker.git
+cd discipline-tracker
 ```
 
 2. Install dependencies:
@@ -187,7 +187,7 @@ The APK will be available in `android/app/build/outputs/apk/release/`
 ## Project Structure
 
 ```
-habit-tracker/
+discipline-tracker/
 ├── src/                       # React TypeScript source code
 │   ├── components/            # React components
 │   │   ├── Tracker.tsx       # Daily habit tracking
