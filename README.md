@@ -2,6 +2,12 @@
 
 A modern, hybrid web and mobile application for tracking daily habits, visualizing progress, and maintaining streaks. Built with React, TypeScript, Vite, and Capacitor.
 
+## Website
+Visit discipline-tracker at https://discipline-tracker-ae1.pages.dev/
+
+## Development Status
+We are currently working on publishing the app to google play store and getting a real domain.
+
 ## Features
 
 - **Dynamic Habit Management**: Add and delete habits on the fly with an intuitive modal interface
