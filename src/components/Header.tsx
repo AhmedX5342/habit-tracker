@@ -34,7 +34,7 @@ export default function Header({ activeTab, onTabChange }: HeaderProps) {
   return (
     <header>
       <div className="header-top">
-        <h1>Discipline</h1>
+        <h1>Discipline Tracker</h1>
         <span className="header-date" id="header-date"></span>
         <div className="hamburger-wrapper">
           <Hamburger 
