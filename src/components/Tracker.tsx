@@ -12,7 +12,7 @@ export default function Tracker({ data, onSave }: TrackerProps) {
   const [selectedDate, setSelectedDate] = useState(todayStr())
   const [trackerChoice, setTrackerChoice] = useState<Record<string, number | null>>({})
   const [showSaveMsg, setShowSaveMsg] = useState(false)
-  const [showSaveMsgTimeout, setShowSaveMsgTimeout] = useState<NodeJS.Timeout | null>(null)
+  const [showSaveMsgTimeout, setShowSaveMsgTimeout] = useState<number | null>(null)  // Changed from NodeJS.Timeout to number
 
   useEffect(() => {
     const entry = data.entries[selectedDate] || {}
@@ -120,12 +120,6 @@ export default function Tracker({ data, onSave }: TrackerProps) {
             )
           })}
         </div>
-        {/* <div className="tracker-save-row">
-          <button className="save-btn" onClick={saveAllHabits}>Save All</button>
-          <span className={`save-msg ${showSaveMsg ? 'show' : ''}`}>
-            {showSaveMsg ? '✓ Saved!' : 'Changes saved instantly'}
-          </span>
-        </div> */}
         <div className="tracker-hint">
           💡 Changes are saved instantly when you click Pass/Fail/Unset
         </div>
