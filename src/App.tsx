@@ -8,6 +8,7 @@ import Support from './components/Support'
 import { HabitData, DiaryEntry } from './types'
 import './App.css'
 import { api } from './utils/api'
+import HabitManager from './components/HabitManager'
 
 function App() {
   const [activeTab, setActiveTab] = useState('tracker')
@@ -47,6 +48,7 @@ function App() {
       <Header activeTab={activeTab} onTabChange={setActiveTab} />
       <div className="page active">
         {activeTab === 'tracker' && <Tracker data={data} onSave={saveData} />}
+        {activeTab === 'habit-manager' && <HabitManager data={data} onSave={saveData} />}
         {activeTab === 'stats' && <Statistics data={data} />}
         {activeTab === 'diary' && <Diary diary={diary} onSave={saveDiary} />}
         {activeTab === 'settings' && <Settings data={data} diary={diary} onSaveData={saveData} onSaveDiary={saveDiary} />}

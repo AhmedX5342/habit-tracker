@@ -20,6 +20,7 @@ export default function Header({ activeTab, onTabChange }: HeaderProps) {
 
   const tabs = [
     { id: 'tracker', label: 'Tracker' },
+    { id: 'habit-manager', label: 'Habit Manager' },
     { id: 'stats', label: 'Statistics' },
     { id: 'diary', label: 'Diary' },
     { id: 'settings', label: 'Settings' },
@@ -45,22 +46,22 @@ export default function Header({ activeTab, onTabChange }: HeaderProps) {
         </div>
         <span className="header-date" id="header-date"></span>
         <div className="hamburger-wrapper">
-          <Hamburger 
-            toggled={isMenuOpen} 
-            toggle={setIsMenuOpen} 
+          <Hamburger
+            toggled={isMenuOpen}
+            toggle={setIsMenuOpen}
             size={24}
             color="var(--text)"
             duration={0.3}
           />
         </div>
       </div>
-      
+
       {/* Desktop Tabs */}
       <div className="tabs desktop-tabs">
         {tabs.map(tab => (
-          <div 
+          <div
             key={tab.id}
-            className={`tab ${activeTab === tab.id ? 'active' : ''}`} 
+            className={`tab ${activeTab === tab.id ? 'active' : ''}`}
             onClick={() => handleTabChange(tab.id)}
           >
             {tab.label}
@@ -71,9 +72,9 @@ export default function Header({ activeTab, onTabChange }: HeaderProps) {
       {/* Mobile Hamburger Menu */}
       <div className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
         {tabs.map(tab => (
-          <div 
+          <div
             key={tab.id}
-            className={`mobile-tab ${activeTab === tab.id ? 'active' : ''}`} 
+            className={`mobile-tab ${activeTab === tab.id ? 'active' : ''}`}
             onClick={() => handleTabChange(tab.id)}
           >
             {tab.label}

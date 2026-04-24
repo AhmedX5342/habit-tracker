@@ -1980,3 +1980,182 @@ button,
     gap: 8px;
   }
 }
+
+/* Habit Manager Styles */
+.habit-manager-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.habit-manager-add-btn {
+  background: var(--amber);
+  color: #0f0f0f;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.15s;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.habit-manager-add-btn:hover {
+  background: #e8a84a;
+}
+
+.habits-manager-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.habit-manager-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.habit-manager-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.habit-manager-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.habit-manager-edit,
+.habit-manager-delete {
+  background: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.habit-manager-edit:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.habit-manager-delete:hover {
+  border-color: var(--red);
+  color: #e08080;
+}
+
+.habit-edit-form {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  align-items: center;
+}
+
+.habit-edit-input {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+}
+
+.habit-edit-save,
+.habit-edit-cancel {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.15s;
+}
+
+.habit-edit-save:hover {
+  border-color: var(--green);
+  color: #6ec989;
+}
+
+.habit-edit-cancel:hover {
+  border-color: var(--red);
+  color: #e08080;
+}
+
+.habits-empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 40px;
+  font-size: 13px;
+}
+
+/* Tracker Unset Button */
+.choice-btn-unset {
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--muted);
+  transition: all 0.15s;
+}
+
+.choice-btn-unset:hover {
+  border-color: var(--amber);
+  color: var(--text);
+}
+
+.tracker-hint {
+  margin-top: 16px;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .habit-manager-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .habit-manager-actions {
+    justify-content: flex-end;
+  }
+  
+  .habit-edit-form {
+    flex-wrap: wrap;
+  }
+  
+  .choice-btns {
+    flex-wrap: wrap;
+  }
+  
+  .choice-btn-unset {
+    flex: 1;
+  }
+}

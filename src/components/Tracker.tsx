@@ -12,8 +12,7 @@ export default function Tracker({ data, onSave }: TrackerProps) {
   const [selectedDate, setSelectedDate] = useState(todayStr())
   const [trackerChoice, setTrackerChoice] = useState<Record<string, number | null>>({})
   const [showSaveMsg, setShowSaveMsg] = useState(false)
-  const [newHabitName, setNewHabitName] = useState('')
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showSaveMsgTimeout, setShowSaveMsgTimeout] = useState<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     const entry = data.entries[selectedDate] || {}
@@ -28,100 +27,53 @@ export default function Tracker({ data, onSave }: TrackerProps) {
     setTrackerChoice(prev => ({ ...prev, [habit]: value }))
   }
 
-  const saveEntry = async () => {
-    for (let h of data.habits) {
-      if (trackerChoice[h] === null) {
-        alert(`Please select Pass or Fail for ${h}.`)
-        return
-      }
+  const saveSingleHabit = async (habit: string, value: number) => {
+    // Update the choice first
+    setChoice(habit, value)
+    
+    // Get all current choices
+    const currentChoices = { ...trackerChoice, [habit]: value }
+    
+    // Save the entry (null values are allowed)
+    const newData = {
+      ...data,
+      entries: { ...data.entries, [selectedDate]: { ...currentChoices } }
     }
+    await onSave(newData)
+    
+    // Show save message
+    if (showSaveMsgTimeout) clearTimeout(showSaveMsgTimeout)
+    setShowSaveMsg(true)
+    const timeout = setTimeout(() => setShowSaveMsg(false), 2000)
+    setShowSaveMsgTimeout(timeout)
+  }
+
+  const saveAllHabits = async () => {
+    // Check which habits are still null
+    const nullHabits = data.habits.filter(h => trackerChoice[h] === null)
+    
+    if (nullHabits.length > 0) {
+      const message = `You haven't set values for: ${nullHabits.join(', ')}.\n\nThese will remain as "unset". Continue?`
+      if (!confirm(message)) return
+    }
+    
     const newData = {
       ...data,
       entries: { ...data.entries, [selectedDate]: { ...trackerChoice } }
     }
     await onSave(newData)
+    
+    if (showSaveMsgTimeout) clearTimeout(showSaveMsgTimeout)
     setShowSaveMsg(true)
-    setTimeout(() => setShowSaveMsg(false), 2000)
-  }
-
-  const openModal = () => {
-    setNewHabitName('')
-    setIsModalOpen(true)
-  }
-
-  const closeModal = () => {
-    setIsModalOpen(false)
-    setNewHabitName('')
-  }
-
-  const addHabit = async () => {
-    const name = newHabitName.trim().toLowerCase()
-    if (!name) {
-      alert('Please enter a habit name')
-      return
-    }
-    if (data.habits.includes(name)) {
-      alert('Habit already exists')
-      return
-    }
-    const newHabits = [...data.habits, name]
-    const newEntries = { ...data.entries }
-    Object.keys(newEntries).forEach(k => {
-      newEntries[k][name] = null
-    })
-    await onSave({ ...data, habits: newHabits, entries: newEntries })
-    closeModal()
-  }
-
-  const deleteHabit = async (habit: string) => {
-    if (!confirm(`Delete habit "${habit}"?`)) return
-    const newHabits = data.habits.filter(h => h !== habit)
-    const newEntries = { ...data.entries }
-    Object.keys(newEntries).forEach(k => {
-      delete newEntries[k][habit]
-    })
-    await onSave({ ...data, habits: newHabits, entries: newEntries })
+    const timeout = setTimeout(() => setShowSaveMsg(false), 2000)
+    setShowSaveMsgTimeout(timeout)
   }
 
   if (data.habits.length === 0) {
     return (
-      <>
-        <div className="section-label">Log Entry</div>
-        <div className="tracker-panel">
-          <p>No habits yet. Add one to get started.</p>
-        </div>
-        <div className="section-label">Habit Management</div>
-        <div className="habits-management">
-          <button className="habit-btn" onClick={openModal}>+ Add Habit</button>
-          <div className="habits-list"></div>
-        </div>
-
-        {/* Modal */}
-        {isModalOpen && (
-          <div className="modal-overlay" onClick={closeModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h3>Add New Habit</h3>
-                <button className="modal-close" onClick={closeModal}>×</button>
-              </div>
-              <div className="modal-body">
-                <input
-                  type="text"
-                  value={newHabitName}
-                  onChange={e => setNewHabitName(e.target.value)}
-                  placeholder="Enter habit name..."
-                  autoFocus
-                  onKeyPress={(e) => e.key === 'Enter' && addHabit()}
-                />
-              </div>
-              <div className="modal-footer">
-                <button className="modal-btn cancel" onClick={closeModal}>Cancel</button>
-                <button className="modal-btn add" onClick={addHabit}>Add Habit</button>
-              </div>
-            </div>
-          </div>
-        )}
-      </>
+      <div className="tracker-panel">
+        <p>No habits yet. Go to the Habit Manager tab to add some!</p>
+      </div>
     )
   }
 
@@ -136,32 +88,46 @@ export default function Tracker({ data, onSave }: TrackerProps) {
         <div className="tracker-rows">
           {data.habits.map(habit => {
             const color = getHabitColor(habit, data.habits)
+            const label = habit.charAt(0).toUpperCase() + habit.slice(1)
+            const choice = trackerChoice[habit]
+            
             return (
               <div key={habit} className="tracker-row">
                 <div className="tracker-label" style={{ color: color.text }}>
-                  {habit.charAt(0).toUpperCase() + habit.slice(1)}
+                  {label}
                 </div>
                 <div className="choice-btns">
                   <button 
-                    className={`choice-btn ${trackerChoice[habit] === 1 ? 'selected-pass' : ''}`} 
-                    onClick={() => setChoice(habit, 1)}
+                    className={`choice-btn ${choice === 1 ? 'selected-pass' : ''}`} 
+                    onClick={() => saveSingleHabit(habit, 1)}
                   >
                     ✓ Pass
                   </button>
                   <button 
-                    className={`choice-btn ${trackerChoice[habit] === 0 ? 'selected-fail' : ''}`} 
-                    onClick={() => setChoice(habit, 0)}
+                    className={`choice-btn ${choice === 0 ? 'selected-fail' : ''}`} 
+                    onClick={() => saveSingleHabit(habit, 0)}
                   >
                     ✗ Fail
+                  </button>
+                  <button 
+                    className="choice-btn-unset"
+                    onClick={() => saveSingleHabit(habit, null as any)}
+                  >
+                    ⊘ Unset
                   </button>
                 </div>
               </div>
             )
           })}
         </div>
-        <div className="tracker-save-row">
-          <button className="save-btn" onClick={saveEntry}>Save Entry</button>
-          <span className={`save-msg ${showSaveMsg ? 'show' : ''}`}>Saved</span>
+        {/* <div className="tracker-save-row">
+          <button className="save-btn" onClick={saveAllHabits}>Save All</button>
+          <span className={`save-msg ${showSaveMsg ? 'show' : ''}`}>
+            {showSaveMsg ? '✓ Saved!' : 'Changes saved instantly'}
+          </span>
+        </div> */}
+        <div className="tracker-hint">
+          💡 Changes are saved instantly when you click Pass/Fail/Unset
         </div>
       </div>
 
@@ -178,50 +144,8 @@ export default function Tracker({ data, onSave }: TrackerProps) {
         })}
       </div>
 
-      <div className="section-label">Habit Management</div>
-      <div className="habits-management">
-        <button className="habit-btn" onClick={openModal}>+ Add Habit</button>
-        <div className="habits-list">
-          {data.habits.map(habit => {
-            const color = getHabitColor(habit, data.habits)
-            return (
-              <div key={habit} className="habit-item">
-                <span className="habit-item-name" style={{ color: color.text }}>{habit}</span>
-                <button className="habit-item-delete" onClick={() => deleteHabit(habit)}>×</button>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
       {/* Calendar View */}
       <Calendar data={data} onDateClick={(date) => setSelectedDate(date)} />
-
-      {/* Modal */}
-      {isModalOpen && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Add New Habit</h3>
-              <button className="modal-close" onClick={closeModal}>×</button>
-            </div>
-            <div className="modal-body">
-              <input
-                type="text"
-                value={newHabitName}
-                onChange={e => setNewHabitName(e.target.value)}
-                placeholder="Enter habit name..."
-                autoFocus
-                onKeyPress={(e) => e.key === 'Enter' && addHabit()}
-              />
-            </div>
-            <div className="modal-footer">
-              <button className="modal-btn cancel" onClick={closeModal}>Cancel</button>
-              <button className="modal-btn add" onClick={addHabit}>Add Habit</button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   )
 }
